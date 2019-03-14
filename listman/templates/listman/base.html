@@ -1,0 +1,90 @@
+ <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> 
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Home Page</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+            </div>
+            <div class="mx-auto order-0">
+                <h1 class="navbar-brand">Logo</h1>
+            </div>
+            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                            {{ request.user.username }}
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Edit Settings</a>
+                            <a class="dropdown-item" href="{% url 'listman:logout' %}">logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+
+        <div class="row" style="border-style: solid">
+
+            <div class="col-sm-4">
+                <div class="input-group mb-3">
+                    <form class="form-inline" method = "POST" action = "">
+                    {% csrf_token %}
+                        <input type="text" class="form-control" placeholder="Add List">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-success" type="submit">Add</button>  
+                        </div>
+                    </form>
+                </div>
+
+                <ul class="nav flex-column">
+                    {% for detail in form.values %}
+                        <li for = "detail{{forloop.counter}}">
+                        <a class = "nav-item" href="#">{{ detail.title }}</a> 
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-sm-8" style = "border-style: dotted">CONTENT</div>
+        </div>
+    </body>
+</html>
+
+<!--
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Home Page</title>
+    </head>
+    <body>
+        <div style="border-style: dotted;">
+            <div style="border-style: solid;" align = "center">
+                <p> HEADER </p>
+            <div>
+            <div style="border-style: dotted;" align = "center">
+                <div style="border-style: solid; width: 30%; heigth: 100%; float: left;" align = "center">
+                    <p> SIDE BAR </p>
+                </div>
+                <div style ="border-style: solid; float: left; width: 68%; heigth: 100" align = "center">
+                    <p> CONTENT </p>
+                </div>
+            <div>
+        </div>
+    </body>
+</html>
+-->
