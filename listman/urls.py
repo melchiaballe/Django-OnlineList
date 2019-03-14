@@ -10,6 +10,8 @@ urlpatterns = [
     path('accounts/logout/', views.logout_user, name = "logout"),
     path('accounts/output/', views.process_login, name = "process"),
     path('accounts/register/', views.register_user, name = "register"),
+    path('accounts/edit/', views.edit_user, name = "edit"),
     path('accounts/forgetpassword/', views.forget_pass, name = "forgetpass"),
     path('', views.index, name = "index"),
+    path('add/list', views.process_add_list, name = "addlist"),
 ]

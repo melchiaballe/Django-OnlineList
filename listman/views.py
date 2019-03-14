@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect, get_object_or_404, 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User 
 from django.contrib.auth.forms import UserCreationForm
-from .forms import UserRegForm, UserLoginForm
+from .forms import UserRegForm, UserLoginForm, UpdateUser
 from .models import List, Todo
 from django.urls import reverse
 
@@ -46,8 +46,7 @@ def register_user(request):
             user = form.save()
             user.email = form.cleaned_data.get('email')
             user.save()
-            form.CreateDefaultList(request)
-
+            
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
@@ -63,5 +62,22 @@ def register_user(request):
 def forget_pass(request):
     return render(request, 'listman/reset_password.html')
     
+def process_add_list(request):
+    listname = request.POST.get('listname')
+    # TRANSFER TO FORMS
+    List.objects.create(title = listname, owner = request.user)
+    return redirect('listman:index')
+
+def edit_user(request):
+    if request.method == 'POST':
+        form = UpdateUser(request.POST)
+        if form.is_valid():
+            form.update(request)
+            return redirect('listman:index')
+        else:
+            form = UpdateUser(request.POST)
+    else:
+        form = UpdateUser(request.POST)
+    return render(request, 'listman/edit_user.html', {'form':form})
 
 

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User 
+from django.db.models.signals import post_save
 # Create your models here.
 
 class List(models.Model):
@@ -20,3 +21,11 @@ class Todo(models.Model):
     
     def __str__(self):
         return self.title
+
+def save_post(sender, instance, created, **kwargs):
+        if created:
+            List.objects.create(title="Default", 
+                owner=instance,
+                description="This is a default user list")
+
+post_save.connect(save_post, sender=User)

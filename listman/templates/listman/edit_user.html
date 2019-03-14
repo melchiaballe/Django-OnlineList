@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Register Page</title>
+	<title>Edit User Page</title>
 </head>
 <body>
     <div align = "center" style="border-style: solid; background-color:lightblue;">
         <form id="form1" name="form1" method="POST">
         {% csrf_token %}
                 <div>
-                    <h2>Register</h2>
+                    <h2>Edit User</h2>
                 </div>
                 {% if form.errors  %}
                     <span style="color: red; " align = "center"><p>{{ form.errors.username }}</p></span>
@@ -16,43 +16,37 @@
                 <div>
                     <label>Username</label>
                     <div>
-                        <input type="text" id="username" name="username" placeholder="username">
+                        <input type="text" id="username" name="username" placeholder="username" value={{ request.user.username }}>
                         <h5>Username can contain any letters or numbers, without spaces</h5>
                     </div>
                 </div>
-            
+
                 <div>
                     <label>E-mail</label>
                     <div>
-                        <input type="email" id="email" name="email" placeholder="email">
+                        <input type="email" id="email" name="email" placeholder="email" value={{ request.user.email }}>
                         <h5>Please provide your E-mail</h5>
                     </div>
-                </div>
-
-                {% if form.errors  %}
-                    <span style="color: red; " align = "center"><p>{{ form.errors.password1 }}</p></span>
-                    <span style="color: red; " align = "center"><p>{{ form.errors.password2 }}</p></span>
-                {% endif %}
-                
+                </div>      
                 <div>
-                    <label>Password</label>
+                    <label>First Name</label>
                     <div>
-                        <input type="password" id="password1" name="password1" placeholder="password">
-                        <h5>Password should be at least 8 characters</h5>
+                        <input type="text" id="first_name" name="first_name" placeholder="First Name" value={{ request.user.first_name }}>
+                        <h5>Please provide first name</h5>
                     </div>
                 </div>
             
                 <div>
-                    <label for="password_confirm">Password (Confirm)</label>
+                    <label>Last Name</label>
                     <div>
-                        <input type="password" id="password2" name="password2" placeholder="confirm password">
-                        <h5>Please confirm password</h5>
+                        <input type="text" id="last_name" name="last_name" placeholder="Last Name" value={{ request.user.last_name }}>
+                        <h5>Please provide last name</h5>
                     </div>
                 </div>
         </form>
         <div align ="center">
-            <input type = "submit" value = "Register" form = "form1">
-            <a href = "{% url 'listman:login' %}"> <button>Cancel</button> </a>
+            <input type = "submit" value = "submit" form = "form1">
+            <a href = "{% url 'listman:index' %}"> <button>Cancel</button> </a>
         </div>
     </div>
     

@@ -18,49 +18,53 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-            <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
-            </div>
-            <div class="mx-auto order-0">
-                <h1 class="navbar-brand">Logo</h1>
-            </div>
-            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                            {{ request.user.username }}
-                        </a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Edit Settings</a>
-                            <a class="dropdown-item" href="{% url 'listman:logout' %}">logout</a>
-                        </div>
-                    </li>
-                </ul>
+            <div class="container">
+                <div class="navbar-collapse collapse w-100 ">
+                </div>
+                <div class="mx-auto order-0">
+                    <h1 class="navbar-brand">Logo</h1>
+                </div>
+                <div class="navbar-collapse collapse w-100 ">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                                {{ request.user.username }}
+                            </a>
+                            <div class="dropdown-menu ">
+                                <a class="dropdown-item" href="{% url 'listman:edit' %}">Edit User Details</a>
+                                <a class="dropdown-item" href="#">Edit Password</a>
+                                <a class="dropdown-item" href="{% url 'listman:logout' %}">logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </nav>
 
+        <div class="container-fluid">
+            <div class="row" style="border-style: solid">
 
-        <div class="row" style="border-style: solid">
+                <div class="col-sm-4" align="center">
+                    <div class="input-group mb-3">
+                        <form class="form-inline" method = "POST" action = "{% url 'listman:addlist' %}">
+                        {% csrf_token %}
+                            <input type="text" class="form-control" placeholder="Add List" name="listname" id="listname">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-success" type="submit">Add</button>  
+                            </div>
+                        </form>
+                    </div>
 
-            <div class="col-sm-4">
-                <div class="input-group mb-3">
-                    <form class="form-inline" method = "POST" action = "">
-                    {% csrf_token %}
-                        <input type="text" class="form-control" placeholder="Add List">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-success" type="submit">Add</button>  
-                        </div>
-                    </form>
+                    <ul class="nav flex-column">
+                        {% for detail in form.values %}
+                            <li for = "detail{{forloop.counter}}">
+                            <a class = "nav-item" href="#">{{ detail.title }}</a> 
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
-
-                <ul class="nav flex-column">
-                    {% for detail in form.values %}
-                        <li for = "detail{{forloop.counter}}">
-                        <a class = "nav-item" href="#">{{ detail.title }}</a> 
-                        </li>
-                    {% endfor %}
-                </ul>
+                <div class="col-sm-8" style = "border-style: dotted">CONTENT</div>
             </div>
-            <div class="col-sm-8" style = "border-style: dotted">CONTENT</div>
         </div>
     </body>
 </html>
