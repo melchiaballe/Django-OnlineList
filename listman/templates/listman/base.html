@@ -76,7 +76,6 @@
                     {% for listformvalues in listform.values %}
                         <div class="row">
                                 <h1 class="display-3">{{ listformvalues.title }}</h1>
-                            
                         </div>
                         {% if listform %}
                             <div class="row">
@@ -92,11 +91,67 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" style="border-style:solid">
-                                <div class="container">
-                                    USER TO DO LIST
+                            {% if todo %}
+                                <div class="row" style="border-style:solid">
+                                    {% for todos in todo.values %}
+                                        <div class="container">
+                                            {% if todos.check_flag == False %}
+                                                <div class="form-check">
+                                                    <div class="row">
+                                                        <div class="col-sm-10">
+                                                            <a href="{% url 'listman:process_checkbox' todos.id%}" method="POST" value={{todos.check_flag}}>
+                                                                <input type="hidden" id="todo_flag" name="todo_flag" value={{listformvalues.id}}>
+                                                                <input type="checkbox" class="form-check-input">
+                                                            </a>
+                                                            <a href="">
+                                                                <label value={{todos.title}}>{{todos.title}}</label>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <form method = "POST" action = "{% url 'listman:process_delete' todos.id%}">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" id="list_id" name="list_id" value={{listformvalues.id}}>
+                                                                <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>  
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
                                 </div>
-                            </div>
+                                <div class="row" style="border-style:solid">
+                                    <h1> DONE TASK </h1>
+                                </div>
+                                <div class="row" style="border-style:dotted">
+                                    {% for todos in todo.values %}
+                                        <div class="container">
+                                            {% if todos.check_flag == True %}
+                                                <div class="form-check">
+                                                    <div class="row">
+                                                        <div class="col-sm-10">
+                                                            <a href="{% url 'listman:process_checkbox' todos.id%}" method="POST" value={{todos.check_flag}}>
+                                                                <input type="hidden" id="todo_flag" name="todo_flag" value={{listformvalues.id}}>   
+                                                                <input type="checkbox" class="form-check-input" checked>
+                                                            </a>
+                                                            <a href="">
+                                                                <label value={{todos.title}}>{{todos.title}}</label>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <form method = "POST" action = "{% url 'listman:process_delete' todos.id%}">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" id="list_id" name="list_id" value={{listformvalues.id}}>
+                                                                <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>  
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>    
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                 </div>

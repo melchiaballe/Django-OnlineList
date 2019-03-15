@@ -18,4 +18,6 @@ urlpatterns = [
     path('list/<int:id>', views.update_index_content, name = "labelPress"),
     path('list/delete/<int:id>', views.process_delete_list, name = "deletelist"),
     path('list/add/<int:id>/todo', views.add_list_todos, name = "addtodo"),
+    path('list/delete/todo/<int:todo_id>', views.process_delete_todo, name = "process_delete"),
+    path('list/finish/todo/<int:todo_id>', views.update_todo_status, name = "process_checkbox"),
 ]

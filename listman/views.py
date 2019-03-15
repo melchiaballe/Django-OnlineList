@@ -13,7 +13,9 @@ def update_index_content(request, id):
     if request.user.is_authenticated:
         form = List.objects.filter(owner = request.user)
         listform = List.objects.filter(pk = id)
-        return render(request, 'listman/base.html', {'form':form, 'listform':listform})
+        todolist = List.objects.get(pk=id)
+        todo = Todo.objects.filter(lst=todolist)
+        return render(request, 'listman/base.html', {'form':form, 'listform':listform, 'todo':todo})
     else:
         return redirect('listman:login')
     
@@ -122,8 +124,35 @@ def process_delete_list(request, id):
     else:
         return redirect('listman:login')
 
-def add_list_todos(request, id):
+def process_delete_todo(request, todo_id):
     if request.user.is_authenticated:
-        return HttpResponse("SUCCESS")
+        if request.method == 'POST':
+            todo = get_object_or_404(Todo, id=todo_id, owner=request.user)
+            todo.delete()
+            return redirect('listman:labelPress', id=request.POST.get('list_id'))
+        else:
+            return redirect('listman:index')
     else:
         return redirect('listman:login')
+
+def add_list_todos(request, id):
+    if request.user.is_authenticated:
+        title = request.POST.get('listname')
+        lst = List.objects.get(pk=id)
+        todo = Todo.objects.create(title =title, lst=lst, owner=request.user)
+        return redirect('listman:labelPress', id=id)
+    else:
+        return redirect('listman:login')
+
+def update_todo_status(request, todo_id):
+    if request.user.is_authenticated:
+        import pdb; pdb.set_trace()
+        if request.method == 'POST':
+            todo = get_object_or_404(Todo, id=todo_id, owner=request.user)
+            flag = request.POST.get('todo_flag')
+            return redirect('listman:labelPress', id=request.POST.get('list_id'))
+        else:
+            return redirect('listman:index')
+    else:
+        return redirect('listman:login')
+

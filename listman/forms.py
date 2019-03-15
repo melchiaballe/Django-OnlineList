@@ -35,16 +35,16 @@ class UpdateUser(forms.Form):
         last_name = self.cleaned_data.get('last_name')
         User.objects.filter(pk=request.user.id).update(username=uname, email=email, first_name=first_name, last_name=last_name)
 
-    def checkPassword(self, request):
-        import pdb; pdb.set_trace()
-        if self.cleaned_data.get('password1') != request.user.password:
-            return False
-        else:
-            if self.cleaned_data.get('password2') != self.cleaned_data.get('password3'):
-                return False
-            else:
-                UpdateUser.updatePassword(request)
-                return True
+    #def checkPassword(self, request):
+        #import pdb; pdb.set_trace()
+        #if self.cleaned_data.get('password1') != request.user.password:
+        #    return False
+        #else:
+        #    if self.cleaned_data.get('password2') != self.cleaned_data.get('password3'):
+        #        return False
+        #    else:
+        #        UpdateUser.updatePassword(request)
+        #        return True
 
-    def updatePassword(self, request):
-        User.objects.filter(pk=request.user.id).update(password = self.password2)
+    #def updatePassword(self, request):
+        #User.objects.filter(pk=request.user.id).update(password = self.password2)
