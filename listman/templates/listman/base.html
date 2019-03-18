@@ -56,14 +56,24 @@
                             {% for detail in form.values %}
                                 <li for = "detail{{forloop.counter}}">
                                     <div class="row">
-                                        <div class="col-sm-8">
+                                        <div class="col-sm-6">
                                             <a class = "nav-item" href="{% url 'listman:labelPress' detail.id %}">{{ detail.title }}</a>
                                         </div>
-                                        <div class="col-sm-2">    
-                                            <form method = "POST" action = "{% url 'listman:deletelist' detail.id%}">
-                                                {% csrf_token %}
-                                                <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>  
-                                            </form>
+                                        <div class="col-sm-4">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <form method = "POST">
+                                                        {% csrf_token %}
+                                                        <button class="btn btn-outline-secondary btn-sm" type="button" data-toggle="modal" data-target="#myModal">Edit</button>  
+                                                    </form>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <form method = "POST" action = "{% url 'listman:deletelist' detail.id%}">
+                                                        {% csrf_token %}
+                                                        <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>  
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </li>
@@ -98,14 +108,29 @@
                                             {% if todos.check_flag == False %}
                                                 <div class="form-check">
                                                     <div class="row">
-                                                        <div class="col-sm-10">
-                                                            <a href="{% url 'listman:process_checkbox' todos.id%}" method="POST" value={{todos.check_flag}}>
-                                                                <input type="hidden" id="todo_flag" name="todo_flag" value={{listformvalues.id}}>
-                                                                <input type="checkbox" class="form-check-input">
-                                                            </a>
-                                                            <a href="">
-                                                                <label value={{todos.title}}>{{todos.title}}</label>
-                                                            </a>
+                                                        <div class="col-sm-8">
+                                                            <div class ="row">
+                                                                <div class="col-sm-4">
+                                                                    <form action="{% url 'listman:process_checkbox' todos.id%}" method="POST">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" id="list_id" name="list_id" value={{listformvalues.id}}>
+                                                                        <input type="hidden" name="flag" value={{todos.check_flag}}>
+                                                                        <button class="btn btn-outline-success" type="submit" id="submit" name="submit" >Done</button>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="col-sm-8">
+                                                                    <a href="">
+                                                                        <label value={{todos.title}}>{{todos.title}}</label>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <form method = "POST">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" id="list_id" name="list_id" value={{listformvalues.id}}>
+                                                                <button class="btn btn-outline-secondary btn-sm" type="button" data-toggle="modal" data-target="#editModal">Edit</button>  
+                                                            </form>
                                                         </div>
                                                         <div class="col-sm-2">
                                                             <form method = "POST" action = "{% url 'listman:process_delete' todos.id%}">
@@ -129,14 +154,29 @@
                                             {% if todos.check_flag == True %}
                                                 <div class="form-check">
                                                     <div class="row">
-                                                        <div class="col-sm-10">
-                                                            <a href="{% url 'listman:process_checkbox' todos.id%}" method="POST" value={{todos.check_flag}}>
-                                                                <input type="hidden" id="todo_flag" name="todo_flag" value={{listformvalues.id}}>   
-                                                                <input type="checkbox" class="form-check-input" checked>
-                                                            </a>
-                                                            <a href="">
-                                                                <label value={{todos.title}}>{{todos.title}}</label>
-                                                            </a>
+                                                        <div class="col-sm-8">
+                                                            <div class ="row">
+                                                                <div class="col-sm-4">
+                                                                    <form action="{% url 'listman:process_checkbox' todos.id%}" method="POST">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" id="list_id" name="list_id" value={{listformvalues.id}}>
+                                                                        <input type="hidden" name="flag" value={{todos.check_flag}}>
+                                                                        <button class="btn btn-outline-danger" type="submit" id="submit" name="submit">Undone</button>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="col-sm-8">
+                                                                    <a href="">
+                                                                        <label value={{todos.title}}>{{todos.title}}</label>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <form method = "POST">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" id="list_id" name="list_id" value={{listformvalues.id}}>
+                                                                <button class="btn btn-outline-secondary btn-sm" type="button" data-toggle="modal" data-target="#editModal">Edit</button>  
+                                                            </form>
                                                         </div>
                                                         <div class="col-sm-2">
                                                             <form method = "POST" action = "{% url 'listman:process_delete' todos.id%}">
@@ -154,6 +194,45 @@
                             {% endif %}
                         {% endif %}
                     {% endfor %}
+                </div>
+            </div>
+            <!--
+                FOR MODAL
+            -->
+            <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Modal Header</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            {{trial.title}}
+                            {{trial.description}}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="editModal" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">EDIT MODAL</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <p>EDIT FORM</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

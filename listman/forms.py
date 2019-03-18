@@ -35,6 +35,11 @@ class UpdateUser(forms.Form):
         last_name = self.cleaned_data.get('last_name')
         User.objects.filter(pk=request.user.id).update(username=uname, email=email, first_name=first_name, last_name=last_name)
 
+class UpdateListModal(forms.Form):
+    title = forms.CharField(max_length=200)
+    description = forms.CharField(widget=forms.Textarea)
+
+    
     #def checkPassword(self, request):
         #import pdb; pdb.set_trace()
         #if self.cleaned_data.get('password1') != request.user.password:

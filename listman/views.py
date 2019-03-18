@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User 
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib import messages
-from .forms import UserRegForm, UserLoginForm, UpdateUser
+from .forms import UserRegForm, UserLoginForm, UpdateUser, UpdateListModal
 from .models import List, Todo
 from django.urls import reverse
 
@@ -15,7 +15,8 @@ def update_index_content(request, id):
         listform = List.objects.filter(pk = id)
         todolist = List.objects.get(pk=id)
         todo = Todo.objects.filter(lst=todolist)
-        return render(request, 'listman/base.html', {'form':form, 'listform':listform, 'todo':todo})
+        trial = UpdateListModal()
+        return render(request, 'listman/base.html', {'form':form, 'listform':listform, 'todo':todo, 'trial':trial})
     else:
         return redirect('listman:login')
     
@@ -72,17 +73,6 @@ def register_user(request):
 
 def forget_pass(request):
     return render(request, 'listman/reset_password.html')
-    
-def process_add_list(request):
-    if request.user.is_authenticated:
-        listname = request.POST.get('listname')
-        listnamecontent = List.objects.filter(owner = request.user)
-        if listname is not '' and listname not in listnamecontent:
-            List.objects.create(title = listname, owner = request.user)
-        
-        return redirect('listman:index')
-    else:
-        return redirect('listman:login')
 
 def edit_user(request):
     if request.user.is_authenticated:
@@ -139,17 +129,34 @@ def add_list_todos(request, id):
     if request.user.is_authenticated:
         title = request.POST.get('listname')
         lst = List.objects.get(pk=id)
-        todo = Todo.objects.create(title =title, lst=lst, owner=request.user)
+        if title is not '':
+            todo = Todo.objects.create(title =title, lst=lst, owner=request.user)
         return redirect('listman:labelPress', id=id)
+    else:
+        return redirect('listman:login')
+
+def process_add_list(request):
+    if request.user.is_authenticated:
+        listname = request.POST.get('listname')
+        listnamecontent = List.objects.filter(owner = request.user)
+        if listname is not '' and listname not in listnamecontent:
+            List.objects.create(title = listname, owner = request.user)
+        
+        return redirect('listman:index')
     else:
         return redirect('listman:login')
 
 def update_todo_status(request, todo_id):
     if request.user.is_authenticated:
-        import pdb; pdb.set_trace()
         if request.method == 'POST':
             todo = get_object_or_404(Todo, id=todo_id, owner=request.user)
-            flag = request.POST.get('todo_flag')
+            flag = request.POST.get('flag')
+            if flag == 'True':
+                flag = False
+            else:
+                flag = True
+            todo.check_flag = flag
+            todo.save()
             return redirect('listman:labelPress', id=request.POST.get('list_id'))
         else:
             return redirect('listman:index')
